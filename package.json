@@ -1,0 +1,24 @@
+{
+  "name": "game_of_life",
+  "version": "1.0.0",
+  "description": "Game of life in JS",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/theo-code33/game-of-life.git"
+  },
+  "author": "Théo Gillet",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/theo-code33/game-of-life/issues"
+  },
+  "homepage": "https://github.com/theo-code33/game-of-life#readme",
+  "dependencies": {
+    "typescript": "^5.4.5"
+  },
+  "devDependencies": {}
+}
