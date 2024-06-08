@@ -9,22 +9,33 @@ export class Cell {
   private x: number;
   private y: number;
   private cellSize: number;
+  private interval: number;
+  private repetitions: number;
 
-  constructor(grid: Grid, x: number, y: number, cellSize: number) {
+  constructor(
+    grid: Grid,
+    x: number,
+    y: number,
+    cellSize: number,
+    alive: boolean = false,
+    interval: number = 1000,
+    repetitions: number = 1
+  ) {
     this.cellColor = DEFAULT_CELL_COLOR;
     this.grid = grid;
     this.x = x;
     this.y = y;
     this.cellSize = cellSize;
-    this.alive =
-      this.grid.grid[Math.floor(y / cellSize)][Math.floor(x / cellSize)];
+    this.alive = alive;
+    this.interval = interval;
+    this.repetitions = repetitions;
   }
 
   isAlive(x: number, y: number): number {
     if (x < 0 || x >= this.grid.rows || y < 0 || y >= this.grid.cols) {
       return 0;
     }
-    return this.grid.grid[x][y] ? 1 : 0;
+    return this.grid.grid[x][y].alive ? 1 : 0;
   }
 
   neighboursCount(x: number, y: number): number {
@@ -38,20 +49,34 @@ export class Cell {
     }
     return count;
   }
-  draw(p: any) {
-    this.neighbors = this.neighboursCount(
-      Math.floor(this.x / this.cellSize),
-      Math.floor(this.y / this.cellSize)
-    );
-    if (this.alive) {
-      if (this.neighbors < 2 || this.neighbors > 3) {
-        this.alive = false;
-      }
-    } else {
-      if (this.neighbors === 3) {
-        this.alive = true;
-      }
+
+  init(p: any) {
+    this.draw(p);
+    this.live(p);
+  }
+
+  live(p: any) {
+    for (let i = 0; i < this.repetitions; i++) {
+      setInterval(() => {
+        this.neighbors = this.neighboursCount(
+          Math.floor(this.x / this.cellSize),
+          Math.floor(this.y / this.cellSize)
+        );
+        if (this.alive) {
+          if (this.neighbors < 2 || this.neighbors > 3) {
+            this.alive = false;
+          }
+        } else {
+          if (this.neighbors === 3) {
+            this.alive = true;
+          }
+        }
+        this.draw(p);
+      }, this.interval);
     }
+  }
+
+  draw(p: any) {
     if (this.alive) {
       this.cellColor = DEFAULT_CELL_COLOR;
     } else {

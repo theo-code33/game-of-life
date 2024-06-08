@@ -1,7 +1,7 @@
 import { Cell } from "./Cell.js";
 
 export default class Grid {
-  public grid: boolean[][];
+  public grid: Cell[][];
   public rows: number;
   public cols: number;
   private cellSize: number;
@@ -12,12 +12,22 @@ export default class Grid {
     this.cellSize = cellSize;
     this.grid = this.prepareGrid();
   }
-  prepareGrid(): boolean[][] {
+  prepareGrid(): Cell[][] {
     const columns = [];
     for (let i = 0; i < this.rows; i++) {
       const row = [];
       for (let j = 0; j < this.cols; j++) {
-        row.push(Math.random() < 0.2 ? true : false);
+        const isAlive = Math.random() < 0.2 ? true : false;
+        const cell = new Cell(
+          this,
+          j * this.cellSize,
+          i * this.cellSize,
+          this.cellSize,
+          isAlive,
+          1000,
+          200
+        );
+        row.push(cell);
       }
       columns.push(row);
     }
@@ -33,11 +43,11 @@ export default class Grid {
     };
     p.draw = () => {
       p.background(0);
-      for (let y = 0; y < height; y += this.cellSize) {
-        for (let x = 0; x < lenght; x += this.cellSize) {
-          new Cell(this, x, y, this.cellSize).draw(p);
-        }
-      }
+      this.grid.forEach((row) => {
+        row.forEach((cell) => {
+          cell.init(p);
+        });
+      });
     };
   }
 }
